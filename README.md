@@ -1,3 +1,1 @@
-The folder contains the function for  a miner.
-Usage :
-   $ python miner.py -a {miner address} -u {URL of node}
+This folder contains some sources and docuents for a dApp.
