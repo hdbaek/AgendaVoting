@@ -1,1 +1,2 @@
-This folder contains sources and documents for a dApp.
+This folder contains sources for User Interface
+Included are files for web programing such as *.html, *.js, *.css, etc 
