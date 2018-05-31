@@ -45,8 +45,7 @@
 		
     </section>
     <section id="viewSetup">
-		<h1>Register Agenda</h1>
-        <p>Register the subject of an agender and options for it</p>
+		<h1>Register Agenda to be voted</h1>
         <div id="divRegisterAgenda">
             <div><span>Subject :</span><input type="text" id="agendaSubject"></div>
 			<div><span>Durating :</span><input type="text" id="agendaDuration"></div>
@@ -54,7 +53,7 @@
             <input type="button" id="buttonRegisterAgenda" value="Register Agenda"/>						
         </div>
 		<br/>
-        <h1>Stock Distribution</h1>
+        <h1>Stock Transfer without condition</h1>
 		<div id="divStockDistribution">
             <div><span>To (address):</span><input type="text" id="toAddress"></div>
             <div><span>No. of shares:</span><input type="text" id="noOfShares"/></div>
@@ -63,8 +62,8 @@
 		<br/>
 		<h1>Delegation of shareholder's right</h1>
 		<div id="divStockDelegation">
-            <div><span>To (address):</span><input type="text" id="toAddress"></div>
-            <div><span>No. of shares:</span><input type="text" id="noOfShares"/></div>
+            <div><span>To (address):</span><input type="text" id="_toAddress"></div>
+            <div><span>No. of shares:</span><input type="text" id="_noOfShares"/></div>
             <input type="button" id="buttonStockDelegation" value="Delegate Stocks"/>						
         </div>
 		<br/>		
@@ -77,12 +76,13 @@
     </section>		
     <section id="viewShowInfo">
       <input type="button" id="buttonShowAgenda" value="Show Agenda"/> <br/>
-	  <textarea id="textareaGetAgendaResult" class="result" readonly="true"></textarea>	  
+	  <textarea id="textareaGetAgendaResult" class="result" readonly="true"></textarea>	<br/>  
 	  <input type="button" id="buttonShowVotingResult" value="Show Voting Result"/> 
-	  number seleted :<input type="text" id="optionNo"/>
-	  <textarea id="textareaVotingResult" class="result"></textarea>
+	  &emsp;with index number:<input type="text" id="optionNo"/>
+	  <textarea id="textareaVotingResult" class="result"></textarea><br/>
 	  <input type="button" id="buttonShowMinutes" value="Show Minutes"/> 
-	  <textarea id="textareaMinutes" class="result" readonly="true"></textarea>
+	   &emsp;with index number:<input type="text" id="indexNo"/>
+	  <textarea id="textareaMinutes" class="result" readonly="true"></textarea><br/>
 	  <input type="button" id="buttonShowDelegation" value="Show Delegation"/> <br/>
 	  <textarea id="textareaDelegation" class="result" readonly="true"></textarea>
     </section>
@@ -95,7 +95,7 @@
 		<textarea id="textareaGetAgenda" class="result" readonly="true"></textarea><br/>
         <div><span>The number you prefer:</span><input type="text" id="number"/></div>
 		<div><span>Number of your voting:</span><input type="text" id="shares"/></div>
-        <input type="button" id="buttonVote" value="submit"/></div>
+        <input type="button" id="buttonVote" value="Submit your opinion"/></div>
     </section>
 </main>
 
