@@ -7,20 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet Client</title>
     <link rel="stylesheet" type="text/css" href="wallet.css"/>
+	<script src="https://unpkg.com/ipfs-api/dist/index.js"></script>
     <script src="lib/ethers.min.js"></script>
     <script src="lib/jquery-3.1.1.min.js"></script>
     <script src="lib/jquery.qrcode.min.js"></script>
+	
     <script src="wallet.js"></script>
+	
 </head>
 
 <body>
 <header id="menu">
-    <a href="#" id="linkHome">Home</a>
-    <a href="#" id="linkCreateNewWallet">Create New Random Wallet</a>	
-    <a href="#" id="linkSetup">Setup</a>
-    <a href="#" id="linkShowInfo">Show Information</a>
-    <a href="#" id="linkVote">Vote for agenda</a>
-    <a href="#" id="linkOpenWallet">Open wallet</a>
+	<h3>
+    <a href="#" id="linkHomeMenu">Home</a>
+    <a href="#" id="linkSetupMenu">Setup</a>
+    <a href="#" id="linkShowInfoMenu">Show Information</a>
+    <a href="#" id="linkVoteMenu">Vote for agenda</a>
+	</h3>
 </header>
 
 <main>
@@ -30,36 +33,26 @@
 
     <section id="errorBox"><header>x</header><p>Error</p></section>
 
-    <section id="viewHome">
-        <h1>Manage stocks, shareholders and shareholders' meeting of a company</h1>
-        
-        <ul>
-            <li>The wallet is an kept in the Local Storage.</li>
-            <li>Wallet can be created by a random mnemonic phrase, opened from a mnemonic phrase or opened from a JSON file, all with a provided password.</li>
-            <li>By a valid password, the wallet can:
-                <ul>
-                    <li>Show its mnemonic phrase</li>
-                    <li>Show first 5 derived addresses and their balances</li>
-                    <li>Send transactions</li>
-                </ul>
-            </li>
-            <li>complete Ethereum wallet implementation and library in JavaScript</li>
-        </ul>
+    <section id="linkHome">
+        <h1>Manage stocks, shareholders and shareholders' meeting of a company</h1><br/>
+        <h1>For initial setup input contract address, ABI and private key</h1><br/>
+		<div id="divContactAddress">
+            <div><span>Contract Address:&nbsp;</span><input type="text" id="contractAddress"></div>
+            <div><span>ABI &emsp;&emsp;:&nbsp;</span><input type="text" id="contractABI"/></div>	
+			<div><span>private key :&nbsp;</span><input type="text" id="privateKey"/></div><br/>
+            <input type="button" id="buttonContractAddress" value="Click for Initial Setup"/>						
+        </div>
+		
     </section>
-
-    <section id="viewCreateNewWallet">
-        <h1>Create a New Wallet</h1>
-        <p>Generate a new wallet: random mnemonic + password -> encrypted JSON.</p>
-        <span>Enter password: </span><input type="password" id="passwordCreateWallet">
-        <input type="button" id="buttonGenerateNewWallet" value="Generate Now"/>
-        <p>JSON:</p>
-        <textarea id="textareaCreateWalletResult" class="result" readonly="true"></textarea>
-    </section>
-
     <section id="viewSetup">
-		<h1>Input Contract Address</h1>
-		<div><span>Contract address:</span><input type="text" id="contractAddress"/>
-        <input type="button" id="buttonContractAddress" value="Assign Contract Address"/></div>
+		<h1>Register Agenda</h1>
+        <p>Register the subject of an agender and options for it</p>
+        <div id="divRegisterAgenda">
+            <div><span>Subject :</span><input type="text" id="agendaSubject"></div>
+			<div><span>Durating :</span><input type="text" id="agendaDuration"></div>
+            <div><span>No. of Options:</span><input type="text" id="agendaOptions"/></div>
+            <input type="button" id="buttonRegisterAgenda" value="Register Agenda"/>						
+        </div>
 		<br/>
         <h1>Stock Distribution</h1>
 		<div id="divStockDistribution">
@@ -74,28 +67,24 @@
             <div><span>No. of shares:</span><input type="text" id="noOfShares"/></div>
             <input type="button" id="buttonStockDelegation" value="Delegate Stocks"/>						
         </div>
-		<br/>
-		<h1>Register Agenda</h1>
-        <p>Register the subject of an agender and options for it</p>
-        <div id="divRegisterAgenda">
-            <div><span>Subject :</span><input type="text" id="agendaSubject"></div>
-            <div><span>No. of Options:</span><input type="text" id="agendaOptions"/></div>
-            <input type="button" id="buttonRegisterAgenda" value="Register Agenda"/>						
-        </div>
-		<br/>
-		<h1>Store Minutes of shareholders' meeting</h1>		  
-        <input type="file" id="fileForUpload"/> <br/>
-        <input type="button" id="buttonUploadFile" value="Upload"/>
+		<br/>		
+		<h1>Store Minutes of shareholders' meeting</h1>		
+		<section id="viewSubmitDocument">
+        <p>Contract owners can register the minutes in the meeting on the Ethereum blockchain decentralized network.</p>
+        <input type="file" id="documentForUpload" /><br/>
+        <input type="button" id="documentUploadButton" value="Submit" />
+		</section>
     </section>		
     <section id="viewShowInfo">
       <input type="button" id="buttonShowAgenda" value="Show Agenda"/> <br/>
-	  <textarea id="textareaGetAgendaResult" class="result" readonly="true"></textarea>
-	  <input type="button" id="buttonShowDelegation" value="Show Delegation"/> <br/>
-	  <textarea id="textareaDelegation" class="result" readonly="true"></textarea>
-	  <input type="button" id="buttonShowVotingResult" value="Show Voting Result"/> <br/>
-	  <textarea id="textareaVotingResult" class="result" readonly="true"></textarea>
+	  <textarea id="textareaGetAgendaResult" class="result" readonly="true"></textarea>	  
+	  <input type="button" id="buttonShowVotingResult" value="Show Voting Result"/> 
+	  number seleted :<input type="text" id="optionNo"/>
+	  <textarea id="textareaVotingResult" class="result"></textarea>
 	  <input type="button" id="buttonShowMinutes" value="Show Minutes"/> 
 	  <textarea id="textareaMinutes" class="result" readonly="true"></textarea>
+	  <input type="button" id="buttonShowDelegation" value="Show Delegation"/> <br/>
+	  <textarea id="textareaDelegation" class="result" readonly="true"></textarea>
     </section>
 
     <section id="viewVote">
@@ -104,14 +93,9 @@
 		<p>The agender in the shareholders' meeting is as below :</p>
 		<input type="button" id="buttonShowAgendaVote" value="Show Agenda"/> <br/>
 		<textarea id="textareaGetAgenda" class="result" readonly="true"></textarea><br/>
-        <div><span>Input the number you prefer:</span><input type="text" id="contractAddress"/>
+        <div><span>The number you prefer:</span><input type="text" id="number"/></div>
+		<div><span>Number of your voting:</span><input type="text" id="shares"/></div>
         <input type="button" id="buttonVote" value="submit"/></div>
-    </section>
-
-    <section id="viewOpenWallet">
-        <h1>Input your private key.</h1>
-        <div><span>private key:</span><input type="text" id="privateKey"/>
-        <input type="button" id="buttonPrivateKey" value="submit private key"/></div>
     </section>
 </main>
 
