@@ -6,8 +6,7 @@ $(document).ready(function () {
 	
     const provider = ethers.providers.getDefaultProvider('ropsten');
 
-	let votingContractAddress = "0x597b86754ca7c5d72f625d1a4f41a6c1459daacb";
-	
+	let votingContractAddress = "0x3805f65a00b97e3a26b237147e2d0132768d632e";
     let votingContractABI = [
 	{
 		"anonymous": false,
@@ -64,33 +63,6 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "agenda",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "startTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "endTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "noOfOptions",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaSetup",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -105,57 +77,12 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "voter",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "votingTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "sharesToVote",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaVote",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [],
 		"name": "deposit",
 		"outputs": [],
 		"payable": true,
 		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "getDocument",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			},
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -193,6 +120,55 @@ $(document).ready(function () {
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agenda",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "endTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "noOfOptions",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaSetup",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "voter",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "votingTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "sharesToVote",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaVote",
+		"type": "event"
 	},
 	{
 		"constant": false,
@@ -321,6 +297,43 @@ $(document).ready(function () {
 	},
 	{
 		"constant": true,
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getDocuments",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getDocumentsCount",
+		"outputs": [
+			{
+				"name": "length",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [],
 		"name": "getEndTime",
 		"outputs": [
@@ -381,76 +394,61 @@ $(document).ready(function () {
 		"type": "function"
 	}
 ];
-	//let privateKey = "0x42979c8c11049bc77721fab28ae0467bed43d3ffe3f6b435888a1118f9b5c31c";
-	var privateKey = "0xbe8cad6b7dc050c26baf9f4bc2fc7e505e0c3b00e01c761d0b482ca7905e2922";
-	//const votingContract = new ethers.Contract(
+	
+	let privateKey = "0xbe8cad6b7dc050c26baf9f4bc2fc7e505e0c3b00e01c761d0b482ca7905e2922";
 	let votingContract = new ethers.Contract(
         votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));
 	
-    let wallets = {};
-
     showView("linkHome");
 
     $('#linkHomeMenu').click(function () {
         showView("linkHome");
-    });    
-    
+    });
 	$('#linkSetupMenu').click(function () {
         showView("viewSetup");
-    });
-	
+    });	
     $('#linkShowInfoMenu').click(function () {
         showView("viewShowInfo");
     });
     $('#linkVoteMenu').click(function () {
         showView("viewVote");
-    });
-	
-	$('#buttonContractAddress').click(setContractAddress);
-    $('#buttonStockDistribution').click(function() {
-	});//setContractAddress);//generateNewWallet);
-    $('#buttonStockDelegation').click(function() {
-	});//openWalletFromMnemonic);
-	$('#buttonRegisterAgenda').click(registerAgenda); 
-    $('#buttonUploadFile').click(function() {
-	});//openWalletFromFile);
-   
+    });	
+	$('#buttonContractAddress').click(setContractAddress); 	
+    $('#buttonRegisterAgenda').click(registerAgenda); 
 	$('#buttonShowAgenda').click(getAgendaContents);
-	$('#buttonShowAgendaVote').click(showAgenda);
-	$('#buttonShowDelegation').click(function() {
-		 
-	});	
+	$('#buttonShowAgendaVote').click(showAgenda);		
     $('#buttonShowVotingResult').click(showVotingResult);
     $('#buttonShowMinutes').click(showMinutes);
     $('#buttonVote').click(voting);
-
 	$('#documentUploadButton').click(uploadDocument);
-
-	function showVotingResult() {
-		try {   
-		    let optionNo = $('#optionNo').val();
-			optionNo *= 1;
-            votingContract.getAgendaVotingVotes(optionNo).then(res => {
-				$('#textareaVotingResult').empty();
-				$('#textareaVotingResult').val(res);
-				showInfo("successful : " + optionNo);
-			});		
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
-	function showMinutes() {
-		try {            
-           //debugger;
-			votingContract.getDocument(0).then(res => {
-				$('#textareaMinutes').val(res);
-				showInfo("successful !!!");
+	$('#buttonShowDelegation').click(showDelegation); // no implementation
+	
+	$('#buttonStockDistribution').click(stockDistribution);
+    $('#buttonStockDelegation').click(stockDelegation);	
+	
+	function stockDistribution() {
+		let to = $('#toAddress').val();
+		let shares = $('#noOfShares').val();
+		shares *= 1;
+		try {
+			votingContract.transferShares(to, shares).then(res => {
+				showInfo("Successful !!!");
 			});
-		}
-        catch (err) {
+		} catch (err) {
             showError(err);
-        }
+        }	
+	}
+	function stockDelegation() {
+		let to = $('#_toAddress').val();
+		let shares = $('#_noOfShares').val();
+		shares *= 1;
+		try {
+			votingContract.transferVotingShares(to, shares).then(res => {
+				showInfo("Successful !!!");
+			});
+		} catch (err) {
+            showError(err);
+        }	
 	}
 	function voting() {
 		let number = $('#number').val();
@@ -465,18 +463,6 @@ $(document).ready(function () {
             showError(err);
         }	
 	}
-	function showAgenda() { // for voting
-		try {            
-            let contents = votingContract.getAgendaContents().then(res => {
-				$('#textareaGetAgenda').val(res);
-				showInfo("successful !!!");
-			});
-			
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
 	function registerAgenda() {		
         let agenda = $('#agendaSubject').val();
 		let duration = $('#agendaDuration').val();
@@ -486,8 +472,7 @@ $(document).ready(function () {
 		try {
             votingContract.registerAgenda(agenda, duration, options).then(res => {
 				showInfo("successful !!!");
-			});
-			
+			});			
 		}
         catch (err) {
             showError(err);
@@ -497,9 +482,9 @@ $(document).ready(function () {
 		let addr = $('#contractAddress').val();
 		let abi = $('#contractABI').val();
 		let key = $('#privateKey').val();
-		privateKey = key;
-		votingContractAddress = addr;		
-		votingContractABI = abi;
+		if (key != "") privateKey = key;
+		if (addr != "") votingContractAddress = addr;		
+		if (abi != "") votingContractABI = abi;
 		votingContract = new ethers.Contract(
         votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));	
 		showInfo("successful !!!");
@@ -549,13 +534,27 @@ $(document).ready(function () {
         $('#linkCreateNewWallet').hide();
         $('#linkImportWalletFromMnemonic').hide();
         $('#linkImportWalletFromFile').hide();
-
         $('#linkShowMnemonic').show();
         $('#linkShowAddressesAndBalances').show();
         $('#linkSendTransaction').show();
         $('#linkDelete').show();
-    }		
-	function uploadDocument() {		
+    }	
+	// FUNCTIONS FOR READING DATA
+	//
+	function showVotingResult() {
+		try {   
+		    let index = $('#optionNo').val();
+			index *= 1;
+            votingContract.getAgendaVotingVotes(index).then(res => {
+				$('#textareaVotingResult').val(res);
+				showInfo("successful : " + optionNo);
+			});		
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function uploadDocument() {				
 		if($('#documentForUpload')[0].files.length == 0) {
 			return showError("Please select a file to upload");
 		}
@@ -574,8 +573,35 @@ $(document).ready(function () {
 					});			
 				}
 			});
-		};
-		
+		};		
 		fileReader.readAsArrayBuffer($('#documentForUpload')[0].files[0]);
+	}
+	function showMinutes() { // document return
+		try {            
+           //debugger;
+		    let index = $('#indexNo').val();
+			index *= 1;
+			votingContract.getDocuments(index).then(res => {
+				$('#textareaMinutes').val(res);
+				showInfo("successful !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showAgenda() { 
+		try {            
+            votingContract.getAgendaContents().then(res => {
+				$('#textareaGetAgenda').val(res);
+				showInfo("successful !!!");
+			});
+			
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showDelegation() {
 	}
 });
