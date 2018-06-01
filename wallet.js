@@ -457,7 +457,7 @@ $(document).ready(function () {
 		shares *= 1;
 		try {
 			votingContract.vote(number, shares).then(res => {
-				showInfo("successful !!!");
+				showInfo("success !!!");
 			});				
 		} catch (err) {
             showError(err);
@@ -471,7 +471,7 @@ $(document).ready(function () {
 		options *= 1;
 		try {
             votingContract.registerAgenda(agenda, duration, options).then(res => {
-				showInfo("successful !!!");
+				showInfo("success !!!");
 			});			
 		}
         catch (err) {
@@ -487,7 +487,7 @@ $(document).ready(function () {
 		if (abi != "") votingContractABI = abi;
 		votingContract = new ethers.Contract(
         votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));	
-		showInfo("successful !!!");
+		showInfo("success !!!");
 	}
 	function getAgendaContents() {
 		try {            
@@ -547,7 +547,7 @@ $(document).ready(function () {
 			index *= 1;
             votingContract.getAgendaVotingVotes(index).then(res => {
 				$('#textareaVotingResult').val(res);
-				showInfo("successful : " + optionNo);
+				showInfo("success !!!");
 			});		
 		}
         catch (err) {
@@ -567,9 +567,9 @@ $(document).ready(function () {
 					return showError(err);
 				if (result) {
 					let ipfsHash = result[0].hash;
-					showInfo("HASH successful :" +  ipfsHash);
+					showInfo("HASH success :" +  ipfsHash);
 					votingContract.saveDocument(ipfsHash).then()(res => {
-						showInfo("Saving successful !!!");
+						showInfo("Saving success !!!");
 					});			
 				}
 			});
@@ -583,7 +583,7 @@ $(document).ready(function () {
 			index *= 1;
 			votingContract.getDocuments(index).then(res => {
 				$('#textareaMinutes').val(res);
-				showInfo("successful !!!");
+				showInfo("success !!!");
 			});
 		}
         catch (err) {
@@ -594,7 +594,7 @@ $(document).ready(function () {
 		try {            
             votingContract.getAgendaContents().then(res => {
 				$('#textareaGetAgenda').val(res);
-				showInfo("successful !!!");
+				showInfo("success !!!");
 			});
 			
 		}
