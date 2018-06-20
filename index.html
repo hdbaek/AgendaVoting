@@ -48,7 +48,7 @@
 		<h1>Register Agenda to be voted</h1>
         <div id="divRegisterAgenda">
             <div><span>Subject :</span><input type="text" id="agendaSubject"></div>
-			<div><span>Durating :</span><input type="text" id="agendaDuration"></div>
+			<div><span>Duration :</span><input type="text" id="agendaDuration"></div>
             <div><span>No. of Options:</span><input type="text" id="agendaOptions"/></div>
             <input type="button" id="buttonRegisterAgenda" value="Register Agenda"/>						
         </div>
@@ -83,7 +83,8 @@
 	  <input type="button" id="buttonShowMinutes" value="Show Minutes"/> 
 	   &emsp;with index number:<input type="text" id="indexNo"/>
 	  <textarea id="textareaMinutes" class="result" readonly="true"></textarea><br/>
-	  <input type="button" id="buttonShowDelegation" value="Show Delegation"/> <br/>
+	  <input type="button" id="buttonShowDelegation" value="Show Voters"/> 
+	   &emsp;with index number:<input type="text" id="indexNo2"/>
 	  <textarea id="textareaDelegation" class="result" readonly="true"></textarea>
     </section>
 
@@ -94,7 +95,7 @@
 		<input type="button" id="buttonShowAgendaVote" value="Show Agenda"/> <br/>
 		<textarea id="textareaGetAgenda" class="result" readonly="true"></textarea><br/>
         <div><span>The number you prefer:</span><input type="text" id="number"/></div>
-		<div><span>Number of your voting:</span><input type="text" id="shares"/></div>
+		<div><span>No. of shares for your voting:</span><input type="text" id="shares"/></div>
         <input type="button" id="buttonVote" value="Submit your opinion"/></div>
     </section>
 </main>
