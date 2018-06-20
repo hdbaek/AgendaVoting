@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
     const provider = ethers.providers.getDefaultProvider('ropsten');
 
-	let votingContractAddress = "0x3805f65a00b97e3a26b237147e2d0132768d632e";
+	let votingContractAddress = "0x285a28332c6dBA076a49f6157Ba87B1f64772D58";
     let votingContractABI = [
 	{
 		"anonymous": false,
@@ -122,55 +122,6 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "agenda",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "startTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "endTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "noOfOptions",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaSetup",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "voter",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "votingTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "sharesToVote",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaVote",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [
 			{
@@ -225,6 +176,55 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agenda",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "endTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "noOfOptions",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaSetup",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "voter",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "votingTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "sharesToVote",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaVote",
+		"type": "event"
+	},
+	{
 		"constant": false,
 		"inputs": [],
 		"name": "withdraw",
@@ -247,6 +247,29 @@ $(document).ready(function () {
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
+		"name": "getActualVoter",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": true,
@@ -367,12 +390,21 @@ $(document).ready(function () {
 	},
 	{
 		"constant": true,
-		"inputs": [],
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			}
+		],
 		"name": "getShareholder",
 		"outputs": [
 			{
 				"name": "",
-				"type": "address[]"
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -396,6 +428,7 @@ $(document).ready(function () {
 ];
 	
 	let privateKey = "0xbe8cad6b7dc050c26baf9f4bc2fc7e505e0c3b00e01c761d0b482ca7905e2922";
+	// address : 0xBAe746299e7dEAF3dD05f085E305B3e4ba8CB7D3
 	let votingContract = new ethers.Contract(
         votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));
 	
@@ -421,7 +454,7 @@ $(document).ready(function () {
     $('#buttonShowMinutes').click(showMinutes);
     $('#buttonVote').click(voting);
 	$('#documentUploadButton').click(uploadDocument);
-	$('#buttonShowDelegation').click(showDelegation); // no implementation
+	$('#buttonShowDelegation').click(showDelegation); 
 	
 	$('#buttonStockDistribution').click(stockDistribution);
     $('#buttonStockDelegation').click(stockDelegation);	
@@ -603,5 +636,17 @@ $(document).ready(function () {
         }
 	}
 	function showDelegation() {
+		try {            
+           //debugger;
+		    let index = $('#indexNo2').val();
+			index *= 1;
+			votingContract.getActualVoter(index).then(res => {
+				$('#textareaDelegation').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
 	}
 });
