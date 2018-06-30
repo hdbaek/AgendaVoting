@@ -23,17 +23,18 @@
     <a href="#" id="linkShowInfoMenu">Show Information</a>
     <a href="#" id="linkVoteMenu">Vote for agenda</a>
 	</h3>
+	<style type="text/css">
+	.box { border:1px solid; width:80%; padding:0px; }
+	</style>
 </header>
 
 <main>
     <section id="loadingBox">Loading ...</section>
-
     <section id="infoBox"><header>x</header><p>Info</p></section>
-
     <section id="errorBox"><header>x</header><p>Error</p></section>
-		
-    </section>
+	
     <section id="viewSetup">
+	<div class="box">
 		<h1>Setup your address as a sender</h1>
 		<div id="divAgenda"><span>msg.sender:</span>
 			<select id="senderAddress">
@@ -52,7 +53,8 @@
 			</select>(if required)
 		</div>
 		<div id="divAgenda"><span>no. of stocks:</span><input type="number" id="amount" style="width:100px;"/>(if required)</div>
-		
+	</div>	
+	<div class="box">
 		<h1>Register Agenda to be voted</h1>
         <div id="divAgenda">
             <div><span>subject :</span><input type="text" id="agendaSubject">(ex, 1. Mary 2. Tom 3. Robert)</div>
@@ -60,21 +62,25 @@
             <div><span>no. of options:</span><input type="text" id="agendaOptions"/>(ex, 3)</div>
 		</div>
             <input type="button" id="buttonRegisterAgenda" value="Register Agenda"/><br>					
-        
+    </div>
+	<div class="box">
 		<h1>Transfer, buy and yield of some stocks</h1>
 		<div>
 			<select id="transfer" style="width:300px;">
-			<option value="v1">Stock Transfer without condition</option>
-			<option value="v2">Delegation of shareholder's right</option>
-			<option value="v3">Buy stock from the contract owner</option>
+			<option value="v1">stock transfer without any condition</option>
+			<option value="v2">delegation of a shareholder's rights</option>
+			<option value="v3">buy stocks from the contract owner</option>
 			</select>
 		</div>				
         <input type="button" id="buttonTransfer" value="  Execute "/>(use the above setup info.)<br>
-		
+	</div>
+	<div class="box">
 		<h1>Store Minutes of shareholders' meeting</h1>		
         <p>Contract owners can register the minutes in the meeting on the Ethereum blockchain decentralized network.</p>
         <input type="file" id="documentForUpload" /><input type="button" id="documentUploadButton" value="Submit"  />
-    </section>		
+    </section>
+    </div>
+	
     <section id="viewShowInfo">
 	  <h1>Show information by retrieving from the smart contract</h1><br>
       <input type="button" id="buttonShowAgenda" value="Show Agenda"/> <br/>
@@ -82,13 +88,13 @@
 	  
 	  <div><input type="button" id="buttonShowIno" value="Retrieve"/>
 			<select id="contractInfo" style="width:300px;">
-			<option value="v1">Show Voting Result on Agenda</option>
-			<option value="v2">Show the Minutes of Shareholders' meeting </option>
-			<option value="v3">Show the Actual Voters(shareholders + delegators)</option>
-			<option value="v4">Show number of stocks owned by :</option>
-			<option value="v5">Show shareholders and their shares</option>
+			<option value="v1">show voting result on the agenda w/ (1-n)</option>
+			<option value="v2">show the minutes of shareholders' meeting w/ (0-n)</option>
+			<option value="v3">show the actual voters(shareholders/delegators) w/ (0-n)</option>
+			<option value="v4">show number of stocks owned by a shareholder /w (address)</option>
+			<option value="v5">show shareholders and their shares w/ (0-n)</option>
 			</select>
-			&nbsp;&nbsp;with index or string:</span><input type="text" id="optionNo" style="width:200px;" />
+			&nbsp;&nbsp;with index or address:</span><input type="text" id="optionNo" style="width:200px;" />
 	  </div>
 	  <textarea id="textareaShowInfo" class="result" readonly="true"></textarea>
 	</section>
@@ -100,8 +106,8 @@
 		<input type="button" id="buttonShowAgendaVote" value="Show Agenda"/> <br/>
 		<textarea id="textareaGetAgenda" class="result" readonly="true"></textarea><br/>
         <div id="agenda">
-			<div><span>The number you prefer:</span><input type="number" id="numbers"/></div><br>
-			<div><span>No. of shares for your voting:</span><input type="number" id="shares"/></div>
+			<div><span>number you prefer:</span><input type="number" id="numbers"/></div><br>
+			<div><span>no. of shares for your voting:</span><input type="number" id="shares"/></div>
 		</div>
         <input type="button" id="buttonVote" value="Submit your opinion"/></div>
     </section>
