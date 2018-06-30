@@ -1,5 +1,10 @@
 This folder contains sources for User Interface.
 
+It includes:
+  - index.html, *.css for UI display
+  - JavaScript for interface with smart contract
+  - JavaScript libraries
+
 User Interface:
  1. 'Setup' menu : 
     - Input msg.sender, recipient, number of stocks to send
