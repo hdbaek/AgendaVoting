@@ -1,3 +1,4 @@
+[Setup Testing Environments]
 1. setup ipfs 
    - ipfs init
    - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"http://example.com\"]"
@@ -6,23 +7,27 @@
    - ipfs daemon
 2. run 'http-server'
 3. Execute 'index.html' for User Interface
-4. In 'Setup' menu 
-   - First, setup the adddres using this UI
+
+[Testing Procedures]
+4. Initially the contract owner published and owned 1,000,000 stocks. check this in 'Show' menu
+5  Input some data to smart contract using 'Setup' menu 
+   - First, setup the msg.sender adddres using this UI
    - Contract owner handovers some stocks to an address
-   - Any address delegates one's stock rights to an address
+   - Any address can delegate one's stock rights to another address
    - Buy some stocks from the contract owner
-   - lastly, input subject, deadline(in hour) from now and number of selections in agenda
+   - lastly, input subject, deadline(in hour) and number of option written in subject
      (for example, subject:'1.NewYork 2. London 3.Seoul 4.LA'  deadline:'24' no. of options: '4')
-5. In 'Show Information' menu
+6. Read the data from the smart contract using 'Show Information' menu
    - Check the number of sharholders and their shares
    - Check the members who have voting rights and their number of rights
-6. In 'Vote for agenda' menu
-   - After setting the contract owner as msg.sender, vote two times with different number and shares to vote
-   - After setting other address as msg.sender, vote several times with different the number and shares to vote
-7. In 'Show Information' menu
+   - others
+7. Do voting on the agenda using 'Vote for agenda' menu
+   - The contract owner as msg.sender, vote two times with different number and shares to vote
+   - Other address as msg.sender, vote several times with different the number and shares to vote
+8. See voting result : 'Show Information' menu
   - Selecting 'voting result' and inputing each number from 1, check if the total voting number is correct 
-8. In 'Setup' menu
+9. Put file to IPFS : 'Setup' menu
   - For 'Store Minutes of shareholders' meeting', select the file prepared and submit to IPFS
     (the file is minutes of sharehplders' meeting)
-9. In 'Show Information' menu
+10. Retrieve file from IPFS : 'Show Information' menu
    - retrieve the minute selected from IPFS
