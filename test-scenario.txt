@@ -30,4 +30,4 @@
   - For 'Store Minutes of shareholders' meeting', select the file prepared and submit to IPFS
     (the file is minutes of sharehplders' meeting)
 10. Retrieve file from IPFS : 'Show Information' menu
-   - retrieve the minute selected from IPFS
+   - retrieve the minute selected from IPFS with index
