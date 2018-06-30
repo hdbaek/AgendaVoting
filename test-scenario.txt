@@ -11,7 +11,8 @@
    - Contract owner handovers some stocks to an address
    - Any address delegates one's stock rights to an address
    - Buy some stocks from the contract owner
-   - lastly, input the agenda, deadline(in hour) from now and number of selections in agenda
+   - lastly, input subject, deadline(in hour) from now and number of selections in agenda
+     (for example, subject:'1.NewYork 2. London 3.Seoul 4.LA'  deadline:'24' no. of options: '4')
 5. In 'Show Information' menu
    - Check the number of sharholders and their shares
    - Check the members who have voting rights and their number of rights
@@ -20,3 +21,8 @@
    - After setting other address as msg.sender, vote several times with different the number and shares to vote
 7. In 'Show Information' menu
   - Selecting 'voting result' and inputing each number from 1, check if the total voting number is correct 
+8. In 'Setup' menu
+  - For 'Store Minutes of shareholders' meeting', select the file prepared and submit to IPFS
+    (the file is minutes of sharehplders' meeting)
+9. In 'Show Information' menu
+   - retrieve the minute selected from IPFS
