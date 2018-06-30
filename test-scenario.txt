@@ -1,0 +1,22 @@
+1. setup ipfs 
+   - ipfs init
+   - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"http://example.com\"]"
+   - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
+   - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\", \"GET\"]"
+   - ipfs daemon
+2. run 'http-server'
+3. Execute 'index.html' for User Interface
+4. In 'Setup' menu 
+   - First, setup the adddres using this UI
+   - Contract owner handovers some stocks to an address
+   - Any address delegates one's stock rights to an address
+   - Buy some stocks from the contract owner
+   - lastly, input the agenda, deadline(in hour) from now and number of selections in agenda
+5. In 'Show Information' menu
+   - Check the number of sharholders and their shares
+   - Check the members who have voting rights and their number of rights
+6. In 'Vote for agenda' menu
+   - After setting the contract owner as msg.sender, vote two times with different number and shares to vote
+   - After setting other address as msg.sender, vote several times with different the number and shares to vote
+7. In 'Show Information' menu
+  - Selecting 'voting result' and inputing each number from 1, check if the total voting number is correct 
