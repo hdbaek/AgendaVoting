@@ -1,12 +1,10 @@
 $(document).ready(function () {
-    const derivationPath = "m/44'/60'/0'/0/";	
-	
+    const derivationPath = "m/44'/60'/0'/0/";		
 	const IPFS = window.IpfsApi('localhost', '5001');
-	const Buffer = IPFS.Buffer;
-	
+	const Buffer = IPFS.Buffer;	
     const provider = ethers.providers.getDefaultProvider('ropsten');
 
-	let votingContractAddress = "0x285a28332c6dBA076a49f6157Ba87B1f64772D58";
+	let votingContractAddress = "0x285a28332c6dBA076a49f6157Ba87B1f64772D58";//"0x02D7F89055Bd62Ff66e8cC358c375fB185224B81";
     let votingContractABI = [
 	{
 		"anonymous": false,
@@ -122,6 +120,55 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "agenda",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "startTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "endTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "noOfOptions",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaSetup",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "voter",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "votingTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "sharesToVote",
+				"type": "uint256"
+			}
+		],
+		"name": "AgendaVote",
+		"type": "event"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -174,55 +221,6 @@ $(document).ready(function () {
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "agenda",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "startTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "endTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "noOfOptions",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaSetup",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "voter",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "votingTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "sharesToVote",
-				"type": "uint256"
-			}
-		],
-		"name": "AgendaVote",
-		"type": "event"
 	},
 	{
 		"constant": false,
@@ -426,42 +424,43 @@ $(document).ready(function () {
 		"type": "function"
 	}
 ];
-	
-	let privateKey = "0xbe8cad6b7dc050c26baf9f4bc2fc7e505e0c3b00e01c761d0b482ca7905e2922";
-	// address : 0xBAe746299e7dEAF3dD05f085E305B3e4ba8CB7D3
-	let votingContract = new ethers.Contract(
-        votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));
-	
-    showView("linkHome");
 
-    $('#linkHomeMenu').click(function () {
-        showView("linkHome");
-    });
-	$('#linkSetupMenu').click(function () {
-        showView("viewSetup");
-    });	
-    $('#linkShowInfoMenu').click(function () {
-        showView("viewShowInfo");
-    });
-    $('#linkVoteMenu').click(function () {
-        showView("viewVote");
-    });	
-	$('#buttonContractAddress').click(setContractAddress); 	
+	contracts = {};
+	setupEthers();
+	
+    showView("viewSetup");
+	
+	$('#linkSetupMenu').click(function () { showView("viewSetup");  });	
+    $('#linkShowInfoMenu').click(function () { showView("viewShowInfo");  });
+    $('#linkVoteMenu').click(function () { showView("viewVote");   });	 
+	
     $('#buttonRegisterAgenda').click(registerAgenda); 
 	$('#buttonShowAgenda').click(getAgendaContents);
 	$('#buttonShowAgendaVote').click(showAgenda);		
     $('#buttonShowVotingResult').click(showVotingResult);
-    $('#buttonShowMinutes').click(showMinutes);
     $('#buttonVote').click(voting);
 	$('#documentUploadButton').click(uploadDocument);
-	$('#buttonShowDelegation').click(showDelegation); 
-	
 	$('#buttonStockDistribution').click(stockDistribution);
     $('#buttonStockDelegation').click(stockDelegation);	
-	
+
+	$('#buttonShowIno').click( function() {
+			option = $('#contractInfo').val()
+			if (option == 'v1') showVotingResult();
+			else if (option == 'v2') showMinutes();
+			else if (option == 'v3') showDelegation();
+			else if (option == 'v4') showShareByShareholder();
+			else if (option == 'v5') showShareholder();
+	});
+	$('#buttonTransfer').click( function() {
+			option = $('#transfer').val()
+			if (option == 'v1') stockDistribution();
+			else if (option == 'v2') stockDelegation();
+			else if (option == 'v3') byStocks();
+	});
 	function stockDistribution() {
-		let to = $('#toAddress').val();
-		let shares = $('#noOfShares').val();
+		votingContract = contracts[$('#senderAddress').val()];
+		let to = $('#recipientAddress').val();
+		let shares = $('#amount').val();
 		shares *= 1;
 		try {
 			votingContract.transferShares(to, shares).then(res => {
@@ -472,8 +471,9 @@ $(document).ready(function () {
         }	
 	}
 	function stockDelegation() {
-		let to = $('#_toAddress').val();
-		let shares = $('#_noOfShares').val();
+		votingContract = contracts[$('#senderAddress').val()];
+		let to = $('#recipientAddress').val();
+		let shares = $('#amount').val();
 		shares *= 1;
 		try {
 			votingContract.transferVotingShares(to, shares).then(res => {
@@ -483,8 +483,21 @@ $(document).ready(function () {
             showError(err);
         }	
 	}
+	function byStocks() {
+		votingContract = contracts[$('#senderAddress').val()];
+		let shares = $('#amount').val();
+		shares *= 1;
+		try {
+			votingContract.buyShares(shares).then(res => {
+				showInfo("Successful !!!");
+			});
+		} catch (err) {
+            showError(err);
+        }	
+	}
 	function voting() {
-		let number = $('#number').val();
+		votingContract = contracts[$('#senderAddress').val()];
+		let number = $('#numbers').val();
 		let shares = $('#shares').val();
 		number *= 1;
 		shares *= 1;
@@ -497,6 +510,7 @@ $(document).ready(function () {
         }	
 	}
 	function registerAgenda() {		
+		votingContract = contracts[$('#senderAddress').val()];
         let agenda = $('#agendaSubject').val();
 		let duration = $('#agendaDuration').val();
 		let options = $('#agendaOptions').val();
@@ -511,18 +525,8 @@ $(document).ready(function () {
             showError(err);
         }
     }
-	function setContractAddress() {
-		let addr = $('#contractAddress').val();
-		let abi = $('#contractABI').val();
-		let key = $('#privateKey').val();
-		if (key != "") privateKey = key;
-		if (addr != "") votingContractAddress = addr;		
-		if (abi != "") votingContractABI = abi;
-		votingContract = new ethers.Contract(
-        votingContractAddress, votingContractABI, new ethers.Wallet(privateKey, provider));	
-		showInfo("success !!!");
-	}
 	function getAgendaContents() {
+		votingContract = contracts[$('#senderAddress').val()];
 		try {            
 			debugger;
             let contents = votingContract.getAgendaContents().then(res => {
@@ -534,7 +538,134 @@ $(document).ready(function () {
             showError(err);
         }
 	}	
-    function showView(viewName) {
+    
+	/*
+	* FUNCTIONS FOR READING DATA
+	*/	
+	function uploadDocument() {		
+		votingContract = contracts[$('#senderAddress').val()];
+		if($('#documentForUpload')[0].files.length == 0) {
+			return showError("Please select a file to upload");
+		}
+
+		let fileReader = new FileReader();
+		fileReader.onload = function() {
+			let fileBuffer = Buffer.from(fileReader.result);
+			IPFS.files.add(fileBuffer, (err, result) => {
+				if (err)
+					return showError(err);
+				if (result) {
+					let ipfsHash = result[0].hash;
+					showInfo("HASH success :" +  ipfsHash);
+					votingContract.saveDocument(ipfsHash).then()(res => {
+						showInfo("Saving success !!!");
+					});			
+				}
+			});
+		};		
+		fileReader.readAsArrayBuffer($('#documentForUpload')[0].files[0]);
+	}
+	function showAgenda() { 
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+            votingContract.getAgendaContents().then(res => {
+				$('#textareaGetAgenda').val(res);
+				showInfo("success !!!");
+			});
+			
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showVotingResult() {
+		votingContract = contracts[$('#senderAddress').val()];
+		try {   
+		    let index = $('#optionNo').val();			
+            votingContract.getAgendaVotingVotes(index*1).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});		
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showMinutes() { // document return
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+           //debugger;
+		    let index = $('#optionNo').val();
+			index *= 1;
+			votingContract.getDocuments(index).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showDelegation() {
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+           //debugger;
+		    let index = $('#optionNo').val();
+			index *= 1;
+			votingContract.getActualVoter(index).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showShareByShareholder() {
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+           //debugger;
+		    let address = $('#optionNo').val();
+			votingContract.getShareByAddress(address).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showShareholder() {
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+           //debugger;
+		    let index = $('#optionNo').val();
+			votingContract.getShareholder(index*1).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	/*
+	* Setup an address for the wallet
+	* 
+	*/
+	function setupEthers() {
+		let privateKey = [ "0xbe8cad6b7dc050c26baf9f4bc2fc7e505e0c3b00e01c761d0b482ca7905e2922",
+							"0xb555bed06f4c30951f940b5f755350572f51f91d318d429f82928b8074e36402",
+							"0x78139d0777ba8ddd229a775986f555cbc9e8b1d9cf9f8bda80646dfe70e30fcc",
+							"0xdfe8cf1a22364200b803842d784b018ac48e6b775d6246d6159ba767ace14a85" 
+		];
+		for (i = 0; i < privateKey.length; i++) {
+			wallet = new ethers.Wallet(privateKey[i]);
+			votingContract = new ethers.Contract(votingContractAddress, votingContractABI, new ethers.Wallet(privateKey[i], provider));
+			contracts[wallet.address] = votingContract;
+		}
+	}
+	function showView(viewName) {
         // Hide all views and show the selected view only
         $('main > section').hide();
         $('#' + viewName).show();
@@ -572,81 +703,4 @@ $(document).ready(function () {
         $('#linkSendTransaction').show();
         $('#linkDelete').show();
     }	
-	// FUNCTIONS FOR READING DATA
-	//
-	function showVotingResult() {
-		try {   
-		    let index = $('#optionNo').val();
-			index *= 1;
-            votingContract.getAgendaVotingVotes(index).then(res => {
-				$('#textareaVotingResult').val(res);
-				showInfo("success !!!");
-			});		
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
-	function uploadDocument() {				
-		if($('#documentForUpload')[0].files.length == 0) {
-			return showError("Please select a file to upload");
-		}
-
-		let fileReader = new FileReader();
-		fileReader.onload = function() {
-			let fileBuffer = Buffer.from(fileReader.result);
-			IPFS.files.add(fileBuffer, (err, result) => {
-				if (err)
-					return showError(err);
-				if (result) {
-					let ipfsHash = result[0].hash;
-					showInfo("HASH success :" +  ipfsHash);
-					votingContract.saveDocument(ipfsHash).then()(res => {
-						showInfo("Saving success !!!");
-					});			
-				}
-			});
-		};		
-		fileReader.readAsArrayBuffer($('#documentForUpload')[0].files[0]);
-	}
-	function showMinutes() { // document return
-		try {            
-           //debugger;
-		    let index = $('#indexNo').val();
-			index *= 1;
-			votingContract.getDocuments(index).then(res => {
-				$('#textareaMinutes').val(res);
-				showInfo("success !!!");
-			});
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
-	function showAgenda() { 
-		try {            
-            votingContract.getAgendaContents().then(res => {
-				$('#textareaGetAgenda').val(res);
-				showInfo("success !!!");
-			});
-			
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
-	function showDelegation() {
-		try {            
-           //debugger;
-		    let index = $('#indexNo2').val();
-			index *= 1;
-			votingContract.getActualVoter(index).then(res => {
-				$('#textareaDelegation').val(res);
-				showInfo("success !!!");
-			});
-		}
-        catch (err) {
-            showError(err);
-        }
-	}
 });
