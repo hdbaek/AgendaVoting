@@ -1,4 +1,17 @@
-This folder contains sources for User Interface.
+Building a dApp on a smart contract using solidity.
+
+The project's targets:
+- handles the issue, buy, sell and transfer of stocks
+- maintains the shareholders and their number of shares
+- supports the minutes and decision from the shareholder's meeting
+- store the documents for minutes using IPFS
+
+This project includes:
+- solidity program for smart contract
+- client-side application which could be used by the shareholders
+- using decentralized storage
+
+Also it contains sources for User Interface.
 
 It includes:
   - index.html, *.css for UI display
