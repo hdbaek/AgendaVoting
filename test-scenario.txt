@@ -5,7 +5,7 @@
    - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
    - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\", \"GET\"]"
    - ipfs daemon
-2. run 'http-server'
+2. run 'http-server' ==> This may not require
 3. Execute 'index.html' for User Interface
 
 [Testing Procedures]
