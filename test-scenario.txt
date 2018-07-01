@@ -17,6 +17,7 @@
    - Buy some stocks from the contract owner
    - lastly, input subject, deadline(in hour) and number of option written in subject
      (for example, subject:'1.NewYork 2. London 3.Seoul 4.LA'  deadline:'24' no. of options: '4')
+     * stock holding is valid at time of this setup and stock delegation is valid after this setup util deadline. 
 6. Read the data from the smart contract using 'Show Information' menu
    - Check the number of sharholders and their shares
    - Check the members who have voting rights and their number of rights
