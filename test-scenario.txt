@@ -1,7 +1,7 @@
 [Setup Testing Environments]
 1. setup ipfs 
    - ipfs init
-   - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"http://example.com\"]"
+   - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
    - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
    - ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\", \"GET\"]"
    - ipfs daemon
@@ -30,4 +30,5 @@
   - For 'Store Minutes of shareholders' meeting', select the file prepared and submit to IPFS
     (the file is minutes of sharehplders' meeting)
 10. Retrieve file from IPFS : 'Show Information' menu
-   - retrieve the minute selected from IPFS with index
+   - Retrieve the hash code of the minutes document just inserted from IPFS with 0
+   - 'ipfs cat {hash-cod}' then watch the contents
