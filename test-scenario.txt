@@ -10,14 +10,17 @@
 
 [Testing Procedures]
 4. Initially the contract owner published and owned 1,000,000 stocks. check this in 'Show' menu
+   - 'show shareholders and their shares' + 0
 5  Input some data to smart contract using 'Setup' menu 
    - First, setup the msg.sender adddres using this UI
    - Contract owner handovers some stocks to an address
-   - Any address can delegate one's stock rights to another address
-   - Buy some stocks from the contract owner
-   - lastly, input subject, deadline(in hour) and number of option written in subject
+   
+   - Buy some stocks from the contract owner ==> MetaMask response ?
+   - Input subject, deadline(in hour) and number of option written in subject
      (for example, subject:'1.NewYork 2. London 3.Seoul 4.LA'  deadline:'24' no. of options: '4')
-     * stock holding is valid at time of this setup and stock delegation is valid after this setup util deadline. 
+	 * stockholding is valid at the time of this setup
+	 * stock delegation is valid after this setup util the deadline
+   - lastly, any address can delegate one's stock rights to another address
 6. Read the data from the smart contract using 'Show Information' menu
    - Check the number of sharholders and their shares
    - Check the members who have voting rights and their number of rights
