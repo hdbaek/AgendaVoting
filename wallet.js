@@ -1,10 +1,13 @@
+/*
+* C:\Progra~2\Google\Chrome\Application\chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
+*/
 $(document).ready(function () {
     const derivationPath = "m/44'/60'/0'/0/";		
 	const IPFS = window.IpfsApi('localhost', '5001');
 	const Buffer = IPFS.Buffer;	
     const provider = ethers.providers.getDefaultProvider('ropsten');
 
-	let votingContractAddress = "0x285a28332c6dBA076a49f6157Ba87B1f64772D58";//"0x02D7F89055Bd62Ff66e8cC358c375fB185224B81";
+	let votingContractAddress =  "0x8B095d4518c06F71901B06f363e36ecBaA304449";
     let votingContractABI = [
 	{
 		"anonymous": false,
@@ -106,18 +109,26 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"anonymous": false,
 		"inputs": [
 			{
-				"name": "hash",
-				"type": "string"
+				"indexed": false,
+				"name": "voter",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "votingTime",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "sharesToVote",
+				"type": "uint256"
 			}
 		],
-		"name": "saveDocument",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "AgendaVote",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -147,26 +158,18 @@ $(document).ready(function () {
 		"type": "event"
 	},
 	{
-		"anonymous": false,
+		"constant": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"name": "voter",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "votingTime",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "sharesToVote",
-				"type": "uint256"
+				"name": "hash",
+				"type": "string"
 			}
 		],
-		"name": "AgendaVote",
-		"type": "event"
+		"name": "saveDocument",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"constant": false,
@@ -205,6 +208,21 @@ $(document).ready(function () {
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"name": "supply",
+				"type": "uint256"
+			},
+			{
+				"name": "price",
+				"type": "uint32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -230,21 +248,6 @@ $(document).ready(function () {
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"name": "supply",
-				"type": "uint256"
-			},
-			{
-				"name": "price",
-				"type": "uint32"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
 	},
 	{
 		"constant": true,
@@ -412,6 +415,20 @@ $(document).ready(function () {
 	{
 		"constant": true,
 		"inputs": [],
+		"name": "getSharePrice",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint32"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
 		"name": "getStartTime",
 		"outputs": [
 			{
@@ -424,7 +441,7 @@ $(document).ready(function () {
 		"type": "function"
 	}
 ];
-
+	
 	contracts = {};
 	setupEthers();
 	
@@ -450,12 +467,13 @@ $(document).ready(function () {
 			else if (option == 'v3') showDelegation();
 			else if (option == 'v4') showShareByShareholder();
 			else if (option == 'v5') showShareholder();
+			else if (option == 'v6') showPricePerStock();
 	});
 	$('#buttonTransfer').click( function() {
 			option = $('#transfer').val()
 			if (option == 'v1') stockDistribution();
 			else if (option == 'v2') stockDelegation();
-			else if (option == 'v3') byStocks();
+			else if (option == 'v3') buyStocks();
 	});
 	function stockDistribution() {
 		votingContract = contracts[$('#senderAddress').val()];
@@ -483,12 +501,15 @@ $(document).ready(function () {
             showError(err);
         }	
 	}
-	function byStocks() {
+	function buyStocks() {
 		votingContract = contracts[$('#senderAddress').val()];
 		let shares = $('#amount').val();
+		pricePerShare = $('#textareaShowInfo').val();
 		shares *= 1;
+		value = shares*pricePerShare;  // price per share is 500 wei
+
 		try {
-			votingContract.buyShares(shares).then(res => {
+			votingContract.buyShares(shares, {'value':value}).then(res => {
 				showInfo("Successful !!!");
 			});
 		} catch (err) {
@@ -593,8 +614,8 @@ $(document).ready(function () {
 	}
 	function showMinutes() { // document return
 		votingContract = contracts[$('#senderAddress').val()];
+		$('#textareaShowInfo').val("");
 		try {            
-           //debugger;
 		    let index = $('#optionNo').val();
 			index *= 1;
 			votingContract.getDocuments(index).then(res => {
@@ -609,7 +630,6 @@ $(document).ready(function () {
 	function showDelegation() {
 		votingContract = contracts[$('#senderAddress').val()];
 		try {            
-           //debugger;
 		    let index = $('#optionNo').val();
 			index *= 1;
 			votingContract.getActualVoter(index).then(res => {
@@ -624,7 +644,6 @@ $(document).ready(function () {
 	function showShareByShareholder() {
 		votingContract = contracts[$('#senderAddress').val()];
 		try {            
-           //debugger;
 		    let address = $('#optionNo').val();
 			votingContract.getShareByAddress(address).then(res => {
 				$('#textareaShowInfo').val(res);
@@ -638,9 +657,20 @@ $(document).ready(function () {
 	function showShareholder() {
 		votingContract = contracts[$('#senderAddress').val()];
 		try {            
-           //debugger;
 		    let index = $('#optionNo').val();
 			votingContract.getShareholder(index*1).then(res => {
+				$('#textareaShowInfo').val(res);
+				showInfo("success !!!");
+			});
+		}
+        catch (err) {
+            showError(err);
+        }
+	}
+	function showPricePerStock() {
+		votingContract = contracts[$('#senderAddress').val()];
+		try {            
+			votingContract.getSharePrice().then(res => {
 				$('#textareaShowInfo').val(res);
 				showInfo("success !!!");
 			});
