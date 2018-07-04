@@ -504,17 +504,21 @@ $(document).ready(function () {
 	function buyStocks() {
 		votingContract = contracts[$('#senderAddress').val()];
 		let shares = $('#amount').val();
-		pricePerShare = $('#textareaShowInfo').val();
-		shares *= 1;
-		value = shares*pricePerShare;  // price per share is 500 wei
-
-		try {
-			votingContract.buyShares(shares, {'value':value}).then(res => {
-				showInfo("Successful !!!");
+		try {            
+			votingContract.getSharePrice().then(pricePerShare => {
+				value = shares*pricePerShare;  
+				try {
+					votingContract.buyShares(shares*1, {'value':value}).then(res => {
+					showInfo("Successful !!!");
+					});
+				} catch (err) {
+					showError(err);
+				}
 			});
 		} catch (err) {
             showError(err);
-        }	
+        }		
+			
 	}
 	function voting() {
 		votingContract = contracts[$('#senderAddress').val()];
