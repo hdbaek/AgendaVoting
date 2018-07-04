@@ -88,6 +88,9 @@ contract CompanyShares {
     function deposit() public payable onlyOwner {
         balance = msg.value;
     }
+	function getSharePrice() view public returns(uint32) {
+        return sharePrice;
+    }
     function getBalance() view public returns(uint256) {
         return balance;
     }
